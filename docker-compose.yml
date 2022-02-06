@@ -28,9 +28,9 @@ services:
     ports: "80:80"
     volumes:
 
-  rest-service:
-    build:
-      context: .
+  flask:
+    build: ./flask
+    restart: always
     depends_on:
       - redis
       - mongodb
