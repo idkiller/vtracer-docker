@@ -8,5 +8,6 @@ RUN git checkout azure
 RUN python3 -m pip install -U pip
 RUN python3 -m pip install setuptools-rust
 RUN python3 -m pip install -r requirements.txt
-RUN python3 ./mongodb_init.py
-ENTRYPOINT ["run.sh"]
+RUN chmod +x /opt/app/run.sh
+#RUN python3 ./mongodb_init.py
+ENTRYPOINT ["/bin/sh", "-c", "python3 ./mongodb_init.py && ./run.sh"]

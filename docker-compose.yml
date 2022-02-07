@@ -3,14 +3,28 @@
 version: "3.9"
 services:
 
+  flask:
+    build: ./flask
+    container_name: vtracer_flask
+    #restart: always
+    depends_on:
+      - redis
+      - mongodb
+    volumes:
+      - "/mnt/vtracer-files/logs/flask:/var/log/flask"
+    environment:
+      - SSL_CERTIFICATE=$SSL_CERTIFICATE
+      - SSL_PRIVATEKEY=$SSL_PRIVATEKEY
+      - MONGODB_URL=$MONGODB_URL
+
   redis:
     image: redis:alpine
-    container_name: redis
+    container_name: vtracer_redis
     restart: always
 
   mongodb:
     image: mongo
-    container_name: mongo
+    container_name: vtracer_mongo
     restart: always
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME
@@ -18,22 +32,10 @@ services:
     volumes:
       - "/var/lib/mongodb:/data/db"
       - "/var/log/mongodb:/var/log/mongodb"
-    ports:
-      - "27017:27017"
 
   nginx:
     build: ./nginx
-    container_name: nginx
+    container_name: vtracer_nginx
     restart: always
-    ports: "80:80"
     volumes:
-
-  flask:
-    build: ./flask
-    restart: always
-    depends_on:
-      - redis
-      - mongodb
-    environment:
-      - SSL_CERTIFICATE=$SSL_CERTIFICATE
-      - SSL_PRIVATEKEY=$SSL_PRIVATEKEY
+      - "/mnt/vtracer-files/logs/nginx:/var/log/nginx"
