@@ -9,5 +9,7 @@ RUN python3 -m pip install -U pip
 RUN python3 -m pip install setuptools-rust
 RUN python3 -m pip install -r requirements.txt
 RUN chmod +x /opt/app/run.sh
-#RUN python3 ./mongodb_init.py
+RUN echo $SSL_CERTIFICATE $SSL_PRIVATEKEY
+COPY $SSL_CERTIFICATE /opt/app
+COPY $SSL_PRIVATEKEY  /opt/app
 ENTRYPOINT ["/bin/sh", "-c", "python3 ./mongodb_init.py && ./run.sh"]
